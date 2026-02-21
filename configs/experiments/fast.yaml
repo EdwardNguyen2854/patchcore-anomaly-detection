@@ -1,0 +1,40 @@
+# Fast experiment config for quick iteration and development.
+#
+# Key changes vs default.yaml:
+#   - coreset_ratio: 0.01 (1% memory bank instead of 10%) → ~10x faster training
+#   - num_neighbors: 3    (fewer k-NN neighbors) → faster inference
+#   - Larger batch sizes  → fewer forward passes
+#   - Visualizations off  → skip disk I/O during iteration
+#
+# Usage:
+#   make train CONFIG=configs/experiments/fast.yaml CATEGORY=bottle
+#   python scripts/train.py --config configs/experiments/fast.yaml --category bottle
+
+dataset:
+  root: "data"
+  category: "bottle"
+  image_size: 224
+  center_crop: 224
+
+model:
+  backbone: "wide_resnet50_2"
+  layers: ["layer2", "layer3"]
+  pretrained: true
+  neighborhood_size: 3  # Locally aware patch aggregation kernel
+  coreset_ratio: 0.01   # ~10x smaller memory bank than default — trades accuracy for speed
+  num_neighbors: 3      # fewer neighbors — faster scoring, slightly noisier maps
+
+train:
+  batch_size: 16
+  num_workers: 4
+  seed: 42
+
+eval:
+  batch_size: 64
+  num_workers: 4
+
+output:
+  dir: "outputs/fast"
+  save_visualizations: false   # skip for speed; enable when inspecting results
+
+device: "auto"

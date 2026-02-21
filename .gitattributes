@@ -1,0 +1,5 @@
+# Normalize line endings to LF in the repository
+* text=auto eol=lf
+
+# Treat notebooks as binary to avoid spurious diffs on output cells
+*.ipynb binary

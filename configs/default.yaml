@@ -1,0 +1,28 @@
+dataset:
+  root: "data"
+  category: "bottle"  # Single category or "all"
+  image_size: 224
+  center_crop: 224
+
+model:
+  backbone: "wide_resnet50_2"
+  layers: ["layer2", "layer3"]
+  pretrained: true
+  neighborhood_size: 3  # Locally aware patch aggregation kernel (paper §3.1); use 1 to disable
+  coreset_ratio: 0.1    # Fraction of patches to keep in memory bank
+  num_neighbors: 9      # k for kNN anomaly scoring
+
+train:
+  batch_size: 8
+  num_workers: 4
+  seed: 42
+
+eval:
+  batch_size: 32
+  num_workers: 4
+
+output:
+  dir: "outputs"
+  save_visualizations: true
+
+device: "auto"  # "auto", "cuda", or "cpu"
