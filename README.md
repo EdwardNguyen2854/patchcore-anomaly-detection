@@ -92,7 +92,20 @@ Performance on MVTec AD (WideResNet-50-2 backbone, coreset_ratio=0.1, k=9):
 │   └── 02_results_analysis.ipynb # Metric comparison, score distributions, ablations
 │
 ├── app/
-│   └── streamlit_app.py          # Interactive web demo
+│   ├── streamlit_app.py          # Interactive Streamlit demo
+│   ├── main.py                   # FastAPI web server
+│   ├── requirements.txt          # Web app dependencies
+│   ├── core/                     # Web app core modules
+│   │   ├── inference.py          # Inference logic
+│   │   ├── training.py           # Training utilities
+│   │   └── config.py             # Configuration
+│   └── static/                   # Static assets
+│       ├── index.html
+│       ├── styles.css
+│       └── app.js
+│
+├── run_web.py                    # Run web app (FastAPI)
+├── run_web.bat                   # Windows launcher
 │
 ├── tests/                        # Unit tests (pytest)
 ├── Makefile                      # One-liner commands for every workflow
@@ -118,8 +131,11 @@ make run CATEGORY=bottle
 # 4. Train + evaluate all 15 categories
 make run-all
 
-# 5. Launch the interactive demo
+# 5. Launch the interactive demo (Streamlit)
 make demo
+
+# 6. Run web app (FastAPI)
+python run_web.py
 ```
 
 > **Note:** Requires Kaggle CLI (`pip install kaggle`).
@@ -142,6 +158,9 @@ python scripts/evaluate.py --config configs/default.yaml --category all
 
 # Demo
 streamlit run app/streamlit_app.py
+
+# Web app (FastAPI)
+python run_web.py
 
 # Tests
 pytest tests/ -v
@@ -265,6 +284,7 @@ natural anomaly score with no threshold to tune at training time.
 
 ## Roadmap
 
+- [x] Web app with FastAPI backend
 - [ ] Multiple backbone support (ResNet-50, EfficientNet-B4, ViT-B/16)
 - [ ] Custom dataset loader for non-MVTec images
 - [ ] ONNX export for production inference
